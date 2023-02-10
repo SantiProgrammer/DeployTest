@@ -18,6 +18,14 @@ const { engine } = require('express-handlebars');
 const redis = require("redis");
 const generateFakeProducts = require('./utils/fakerProductGenerator');
 const moment = require('moment');
+/* const AWS = require("aws-sdk");
+
+AWS.config.update({
+  region: "us-east-1",
+});
+
+const sns = new AWS.SNS();
+const SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:966058109590:notificaciones"; */
 
 const containerFileSystem = require('./container/containerFileSystem');
 const containerFSProductos = new containerFileSystem('productos');
@@ -45,7 +53,7 @@ const RedisStore = require("connect-redis")(session);
 app.use(compression());
 app.use(
   session({
-    store: new RedisStore({ host: `0.0.0.0:PORT`, port: 6379, client, ttl: 300 }),
+    store: new RedisStore({ host: "localhost", port: 6379, client, ttl: 300 }),
     secret: "keyboard cat",
     cookie: {
       httpOnly: false,
