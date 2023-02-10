@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 const session = require("express-session");
 const app = express();
 const wLogger = require("./services/winston")
@@ -27,8 +28,8 @@ const timestamp = moment().format('h:mm a');
 const FakeP = generateFakeProducts(5);
 const compression = require('compression')
 
-const PORT = parseInt(process.argv[2]) || 8080;
-httpServer.listen(PORT, () => wLogger.log('info', "SERVER ON http://localhost:" + PORT));
+const PORT = process.env.PORT || 7777;
+httpServer.listen(PORT);
 
 const client = redis.createClient({ legacyMode: true, });
 client
