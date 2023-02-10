@@ -102,8 +102,20 @@ app.get('/info', (req, res) => {
 app.get('/nginx', routesNginx.getNginx);
 app.get('/api/randoms', routesNginx.getApiRandoms);
 app.get("/form", checkAuthentication, (req, res) => { res.render('form', { layout: 'logged' }); });
-app.get('/products-list', async (req, res) => { res.render('products-list'); });
-app.get('/productos-test', async (req, res) => { res.render('productos-test'); });
+app.get('/products-list', async (req, res) => {
+  try {
+    res.render('products-list');
+  } catch (e) {
+    wLogger.log('error', e)
+  }
+});
+app.get('/productos-test', async (req, res) => {
+  try {
+    res.render('productos-test');
+  } catch (e) {
+    wLogger.log('error', e)
+  }
+});
 app.get("/ruta-protegida", checkAuthentication, (req, res) => {
   const { username, password } = req.user;
   const user = { username, password };
@@ -213,24 +225,35 @@ const normalizarData = (data) => {
   return dataNormalizada;
 }
 const normalizarMensajes = async () => {
-  const messages = await containerFSMensajes.getAll();
-  const normalizedMessages = normalizarData(messages);
-  return normalizedMessages;
+  try {
+    const messages = await containerFSMensajes.getAll();
+    const normalizedMessages = normalizarData(messages);
+    return normalizedMessages;
+
+  } catch (e) {
+    wLogger.log('error', e)
+  }
+
 
 }
 
 /* Socket */
 io.on("connection", async (socket) => {
-  socket.emit("products-list", await productosFS);
-  socket.emit("productos-test", await FakeP)
-  socket.emit("msg-list", await normalizarMensajes());
-  socket.on("product", async (data) => {
-    await containerFSProductos.save(data);
-    io.sockets.emit("product-list", await productosFS);
-  });
+  try {
+    socket.emit("products-list", await productosFS);
+    socket.emit("productos-test", await FakeP)
+    socket.emit("msg-list", await normalizarMensajes());
+    socket.on("product", async (data) => {
+      await containerFSProductos.save(data);
+      io.sockets.emit("product-list", await productosFS);
+    });
 
-  socket.on("msg", async (data) => {
-    await containerFSMensajes.save({ ...data, timestamp: timestamp });
-    io.sockets.emit("msg-list", await normalizarMensajes());
-  });
+    socket.on("msg", async (data) => {
+      await containerFSMensajes.save({ ...data, timestamp: timestamp });
+      io.sockets.emit("msg-list", await normalizarMensajes());
+    });
+
+  } catch (e) {
+    wLogger.log('error', e)
+  }
 });
