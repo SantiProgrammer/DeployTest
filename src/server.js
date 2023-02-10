@@ -28,7 +28,7 @@ const timestamp = moment().format('h:mm a');
 const FakeP = generateFakeProducts(5);
 const compression = require('compression')
 
-const PORT = process.env.PORT || 7777;
+const PORT = process.env.PORT || 8087;
 httpServer.listen(PORT);
 
 const client = redis.createClient({ legacyMode: true, });
@@ -45,7 +45,7 @@ const RedisStore = require("connect-redis")(session);
 app.use(compression());
 app.use(
   session({
-    store: new RedisStore({ host: "0.0.0.0", port: 6379, client, ttl: 300 }),
+    store: new RedisStore({ host: `0.0.0.0:PORT`, port: 6379, client, ttl: 300 }),
     secret: "keyboard cat",
     cookie: {
       httpOnly: false,
