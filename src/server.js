@@ -65,7 +65,7 @@ app.use(
   session({
     store: new RedisStore({
       host: "containers-us-west-187.railway.app",
-      port: 6626,
+      port,
       client,
       ttl: 300
     }),
