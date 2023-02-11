@@ -12,8 +12,8 @@ const bcrypt = require("bcrypt");
 const routes = require("./routes/routes");
 const routesChat = require("./routes/routesChat");
 const routesNginx = require("./routes/routesNginx");
-const mongoConect = require("./services/mongo");
-mongoConect();
+const mongoConnect = require("./services/mongo");
+mongoConnect();
 const { engine } = require('express-handlebars');
 const redis = require("redis");
 const generateFakeProducts = require('./utils/fakerProductGenerator');
@@ -40,13 +40,29 @@ const PORT = process.env.PORT || 8087;
 httpServer.listen(PORT);
 
 const client = redis.createClient({ legacyMode: true, });
-client
-  .connect()
-  .then(() => wLogger.log('info', "Connected to REDIS ✅"))
-  .catch((e) => {
-    throw wLogger.log('error', `Can not connect to Redis! ❌ ${e}`);
-  });
+
+
+const redisConnect = async () => {
+  try {
+    return client
+      .connect()
+      .then(() => wLogger.log('info', "Connected to Redis ✅"))
+      .catch((e) => {
+        throw wLogger.log('error', `Can not connect to Redis! ❌ ${e}`);
+      });
+
+  } catch (e) {
+    wLogger.log('error', `Can not connect to Redis! ❌❌ ${e}`);
+  }
+
+}
+
+
+redisConnect()
+
 const RedisStore = require("connect-redis")(session);
+
+
 
 
 /* Middlewares */
