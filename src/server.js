@@ -36,8 +36,8 @@ const timestamp = moment().format('h:mm a');
 const FakeP = generateFakeProducts(5);
 const compression = require('compression')
 
-const PORT = `0.0.0.0:${PORT}`;
-httpServer.listen(PORT);
+const PORT = process.env.PORT || 8089;
+httpServer.listen(`0.0.0.0:${PORT}`);
 
 const client = redis.createClient({ legacyMode: true, });
 
