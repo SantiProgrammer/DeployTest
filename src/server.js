@@ -2,7 +2,7 @@ const express = require("express");
 require('dotenv').config();
 const session = require("express-session");
 const app = express();
-const wLogger = require("./services/winston")
+const wLogger = require("./utils/winston")
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer);
 const passport = require("passport");
@@ -17,7 +17,7 @@ const mongoConnect = require("./services/mongo");
 mongoConnect();
 const { engine } = require('express-handlebars');
 const redis = require("redis");
-const generateFakeProducts = require('./utils/fakerProductGenerator');
+const generateFakeProducts = require('./mocks/fakerProductGenerator');
 const moment = require('moment');
 /* const AWS = require("aws-sdk");
 
@@ -38,20 +38,19 @@ const FakeP = generateFakeProducts(5);
 const compression = require('compression')
 
 const PORT = process.env.PORT || 8089;
-httpServer.listen(PORT);
+httpServer.listen(PORT, () => { `Server on http://localhost:${PORT}` });
 
-const client = redis.createClient({ legacyMode: true, });
+const client = redis.createClient();
 
 const redisConnect = async () => {
   try {
     return client
-      .connect("redis://default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626")
-      .then(() => wLogger.log('info', "Connected to Redis ✅"))
+      .connect("redis://default:bejSQHLCZK3T031qlStf@containers-us-west-187.railway.app:6626")
+      .then(() => wLogger.log('info', "✅ Connected to Redis"))
   } catch (e) {
-    wLogger.log('error', `Can not connect to Redis! ❌❌ ${e}`);
+    throw wLogger.log('error', ` ❌ Can not connect to Redis! ${e}`);
   }
 }
-
 
 redisConnect()
 
@@ -226,6 +225,7 @@ passport.use(
 
 /* Normalizacion */
 const { normalize, schema } = require('normalizr');
+const { CLIENT_RENEG_WINDOW } = require("tls");
 const authorSchema = new schema.Entity('authors', {}, { idAttribute: 'email' })
 const messageSchema = new schema.Entity('messages', {
   author: authorSchema
