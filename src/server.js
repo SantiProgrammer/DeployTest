@@ -42,7 +42,7 @@ httpServer.listen(PORT, () => { `Server on http://localhost:${PORT}` });
 
 const client = redis.createClient({ legacyMode: true });
 
-(redisConnect = async () => {
+/* (redisConnect = async () => {
   try {
     return client
       .connect("redis://default:bejSQHLCZK3T031qlStf@containers-us-west-187.railway.app:6626")
@@ -50,7 +50,7 @@ const client = redis.createClient({ legacyMode: true });
   } catch (e) {
     throw wLogger.log('error', ` ❌ Can not connect to Redis! ${e}`);
   }
-})();
+})(); */
 
 
 
