@@ -40,7 +40,7 @@ const compression = require('compression')
 const PORT = process.env.PORT || 8089;
 httpServer.listen(PORT, () => { `Server on http://localhost:${PORT}` });
 
-const client = redis.createClient();
+const client = redis.createClient({ legacyMode: true });
 
 (redisConnect = async () => {
   try {
