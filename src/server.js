@@ -19,14 +19,14 @@ const { engine } = require('express-handlebars');
 const redis = require("redis");
 const generateFakeProducts = require('./mocks/fakerProductGenerator');
 const moment = require('moment');
-/* const AWS = require("aws-sdk");
+const AWS = require("aws-sdk");
 
 AWS.config.update({
   region: "us-east-1",
 });
 
 const sns = new AWS.SNS();
-const SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:966058109590:notificaciones"; */
+const SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:966058109590:notificaciones";
 
 const containerFileSystem = require('./container/containerFileSystem');
 const containerFSProductos = new containerFileSystem('productos');
@@ -40,17 +40,23 @@ const compression = require('compression')
 const PORT = process.env.PORT || 8089;
 httpServer.listen(PORT, () => { `Server on http://localhost:${PORT}` });
 
-const client = redis.createClient({ legacyMode: true });
+const client = redis.createClient({
+  socket: {
+    host: 'containers-us-west-187.railway.app',
+    port: '6626'
+  },
+  password: 'bejSQHLCZK3T031qlStf'
+});
 
-/* (redisConnect = async () => {
+(redisConnect = async () => {
   try {
     return client
-      .connect("redis://default:bejSQHLCZK3T031qlStf@containers-us-west-187.railway.app:6626")
+      .connect()
       .then(() => wLogger.log('info', "✅ Connected to Redis"))
   } catch (e) {
     throw wLogger.log('error', ` ❌ Can not connect to Redis! ${e}`);
   }
-})(); */
+})();
 
 
 
