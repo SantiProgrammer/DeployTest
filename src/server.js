@@ -12,6 +12,7 @@ const bcrypt = require("bcrypt");
 const routes = require("./routes/routes");
 const routesChat = require("./routes/routesChat");
 const routesNginx = require("./routes/routesNginx");
+const MongoStore = require('connect-mongo');
 const mongoConnect = require("./services/mongo");
 mongoConnect();
 const { engine } = require('express-handlebars');
@@ -37,11 +38,11 @@ const FakeP = generateFakeProducts(5);
 const compression = require('compression')
 
 const PORT = process.env.PORT || 8089;
-httpServer.listen(`0.0.0.0:${PORT}`);
+httpServer.listen(PORT);
 
 const client = redis.createClient({ legacyMode: true, });
 
-const redisConnect = async () => {
+/* const redisConnect = async () => {
   try {
     return client
       .connect("redis://default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626")
@@ -55,12 +56,29 @@ const redisConnect = async () => {
   }
 
 }
-redisConnect()
+redisConnect() */
 
 const RedisStore = require("connect-redis")(session);
 
 /* Middlewares */
 app.use(compression());
+/* app.use(session({
+  store: MongoStore.create({
+    mongoUrl: config.MONGO_CONNECTION,
+    mongoOptions: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  }),
+  secret: config.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 600000 //10 mins
+  }
+})
+);
+ */
 app.use(
   session({
     store: new RedisStore({
