@@ -42,10 +42,10 @@ httpServer.listen(PORT);
 
 const client = redis.createClient({ legacyMode: true, });
 
-/* const redisConnect = async () => {
+const redisConnect = async () => {
   try {
     return client
-      .connect("redis://default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626")
+      .connect('redis://default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626')
       .then(() => wLogger.log('info', "Connected to Redis ✅"))
       .catch((e) => {
         throw wLogger.log('error', `Can not connect to Redis! ❌ ${e}`);
@@ -55,10 +55,8 @@ const client = redis.createClient({ legacyMode: true, });
     wLogger.log('error', `Can not connect to Redis! ❌❌ ${e}`);
   }
 
-} */
+}
 
-
-redisConnect.connect()
 
 redisConnect()
 
@@ -66,28 +64,12 @@ const RedisStore = require("connect-redis")(session);
 
 /* Middlewares */
 app.use(compression());
-/* app.use(session({
-  store: MongoStore.create({
-    mongoUrl: config.MONGO_CONNECTION,
-    mongoOptions: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
-  }),
-  secret: config.SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 600000 //10 mins
-  }
-})
-);
- */
 app.use(
   session({
     store: new RedisStore({
       host: "containers-us-west-187.railway.app",
-      port: process.env.REDISPORT,
+      password: "mMUkPFE2BnJk7YtxFIFi",
+      port: 6626,
       client,
       ttl: 300
     }),
