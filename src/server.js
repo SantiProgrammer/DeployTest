@@ -45,7 +45,7 @@ const client = redis.createClient({ legacyMode: true, });
 const redisConnect = async () => {
   try {
     return client
-      .connect('//default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626')
+      .connect("redis://default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626")
       .then(() => wLogger.log('info', "Connected to Redis ✅"))
       .catch((e) => {
         throw wLogger.log('error', `Can not connect to Redis! ❌ ${e}`);
