@@ -55,8 +55,12 @@ const client = redis.createClient({ legacyMode: true, });
     wLogger.log('error', `Can not connect to Redis! ❌❌ ${e}`);
   }
 
-}
-redisConnect() */
+} */
+
+
+redisConnect.connect()
+
+redisConnect()
 
 const RedisStore = require("connect-redis")(session);
 
