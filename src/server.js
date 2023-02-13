@@ -47,16 +47,10 @@ const redisConnect = async () => {
     return client
       .connect("redis://default:mMUkPFE2BnJk7YtxFIFi@containers-us-west-187.railway.app:6626")
       .then(() => wLogger.log('info', "Connected to Redis ✅"))
-      .catch((e) => {
-        throw wLogger.log('error', `Can not connect to Redis! ❌ ${e}`);
-      });
-
   } catch (e) {
     wLogger.log('error', `Can not connect to Redis! ❌❌ ${e}`);
   }
-
 }
-
 
 
 redisConnect()
