@@ -42,7 +42,7 @@ httpServer.listen(PORT, () => { `Server on http://localhost:${PORT}` });
 
 const client = redis.createClient();
 
-const redisConnect = async () => {
+(redisConnect = async () => {
   try {
     return client
       .connect("redis://default:bejSQHLCZK3T031qlStf@containers-us-west-187.railway.app:6626")
@@ -50,9 +50,9 @@ const redisConnect = async () => {
   } catch (e) {
     throw wLogger.log('error', ` ❌ Can not connect to Redis! ${e}`);
   }
-}
+})();
 
-redisConnect()
+
 
 const RedisStore = require("connect-redis")(session);
 
