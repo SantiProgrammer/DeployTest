@@ -56,12 +56,7 @@ const RedisStore = require("connect-redis")(session);
 app.use(compression());
 app.use(
   session({
-    store: new RedisStore({
-      host: "localhost",
-      port,
-      client,
-      ttl: 300
-    }),
+    store: new RedisStore({ host: "localhost", port: 6626, client, ttl: 300 }),
     secret: "keyboard cat",
     cookie: {
       httpOnly: false,
@@ -202,7 +197,7 @@ passport.use(
 
         const newUser = {
           username: username,
-          password: createHash(password),
+          password: password, /* createHash(password), */
         };
         Usuarios.create(newUser, (err, userWithId) => {
           if (err) {
