@@ -19,14 +19,6 @@ const { engine } = require('express-handlebars');
 const redis = require("redis");
 const generateFakeProducts = require('./mocks/fakerProductGenerator');
 const moment = require('moment');
-const AWS = require("aws-sdk");
-
-AWS.config.update({
-  region: "us-east-1",
-});
-
-const sns = new AWS.SNS();
-const SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:966058109590:notificaciones";
 
 const containerFileSystem = require('./container/containerFileSystem');
 const containerFSProductos = new containerFileSystem('productos');
@@ -38,7 +30,7 @@ const FakeP = generateFakeProducts(5);
 const compression = require('compression')
 
 const PORT = process.env.PORT || 8089;
-httpServer.listen(PORT, () => { `Server on http://localhost:${PORT}` });
+httpServer.listen(PORT, () => wLogger.log("info", `Server on http://localhost:${PORT}`));
 
 const client = redis.createClient({
   socket: {
@@ -47,7 +39,7 @@ const client = redis.createClient({
   },
   password: 'bejSQHLCZK3T031qlStf'
 });
-
+/* const client = redis.createClient({ legacyMode: true, }); */
 (redisConnect = async () => {
   try {
     return client
@@ -57,8 +49,6 @@ const client = redis.createClient({
     throw wLogger.log('error', ` ❌ Can not connect to Redis! ${e}`);
   }
 })();
-
-
 
 const RedisStore = require("connect-redis")(session);
 
@@ -219,7 +209,7 @@ passport.use(
             wLogger.log('warn', "❌ Error in Saving user: " + err);
             return done(err);
           }
-          wLogger.log(user);
+          wLogger.log('info', user);
           wLogger.log('warn', "User Registration succesful ✅");
           return done(null, userWithId);
         });
