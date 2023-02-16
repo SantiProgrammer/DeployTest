@@ -32,14 +32,15 @@ const compression = require('compression')
 const PORT = process.env.PORT || 8089;
 httpServer.listen(PORT, () => wLogger.log("info", `Server on http://localhost:${PORT}`));
 
-/* const client = redis.createClient({
+const client = redis.createClient({
   socket: {
     host: 'containers-us-west-187.railway.app',
     port: '6626'
   },
+  legacyMode: true,
   password: 'bejSQHLCZK3T031qlStf'
-}); */
-const client = redis.createClient({ legacyMode: true, });
+});
+/* const client = redis.createClient({ legacyMode: true, }); */
 (redisConnect = async () => {
   try {
     return client
